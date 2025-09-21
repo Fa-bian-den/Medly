@@ -10,13 +10,14 @@ class Profile extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'birthdate',
         'address',
+        'idcard',
         'phone',
         'gender',
         'documents_metadata',
-        'professional_details'
+        'professional_details',
+        'user_id'
     ];
 
     protected $casts = [

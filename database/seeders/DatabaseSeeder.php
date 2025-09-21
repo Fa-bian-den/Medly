@@ -43,5 +43,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             \Database\Seeders\CreateAdminUserSeeder::class,
         ]);
+
+        //Departamentos y municipios
+        $this->call([
+            \Database\Seeders\DepartamentSeeder::class,
+        ]);
     }
 }

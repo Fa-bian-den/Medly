@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('birthdate')->nullable();
             $table->text('address')->nullable();
+            $table->text('idcard')->nullable();
             $table->string('phone')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->json('documents_metadata')->nullable(); // referencias a archivos subidos

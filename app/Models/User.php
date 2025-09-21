@@ -60,4 +60,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Profile::class);
     }
 
+    public function centers()
+    {
+        return $this->belongsToMany(\App\Models\Center::class, 'center_user')
+                    ->withPivot(['active_from','active_to','primary','notes'])
+                    ->withTimestamps();
+    }
+
+    public function centerUsers()
+    {
+        return $this->hasMany(\App\Models\CenterUser::class);
+    }
+
+
 }

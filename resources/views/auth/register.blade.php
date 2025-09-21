@@ -2,11 +2,18 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
-        <!-- Name -->
+        <!-- First Name -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            <x-input-label for="first_name" :value="__('First name')" />
+            <x-text-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus autocomplete="given-name" />
+            <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
+        </div>
+
+        <!-- Last Name -->
+        <div class="mt-4">
+            <x-input-label for="last_name" :value="__('Last name')" />
+            <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required autocomplete="family-name" />
+            <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
@@ -16,26 +23,45 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Role Selector -->
+        <div class="mt-4">
+            <x-input-label :value="__('I am')" />
+            <div class="flex items-center gap-4 mt-2">
+                <label class="inline-flex items-center">
+                    <input type="radio" name="role" value="paciente" class="form-radio" {{ old('role','paciente') === 'paciente' ? 'checked' : '' }}>
+                    <span class="ml-2">{{ __('Paciente') }}</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" name="role" value="medico" class="form-radio" {{ old('role') === 'medico' ? 'checked' : '' }}>
+                    <span class="ml-2">{{ __('Médico') }}</span>
+                </label>
+            </div>
+            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+        </div>
+
+        <!-- Carnet MINSA (visible solo si role = medico) -->
+        <div class="mt-4" id="carnet-group" style="display: {{ old('role') === 'medico' ? 'block' : 'none' }};">
+            <x-input-label for="carnet_minsa" :value="__('Carnet MINSA (solo médicos)')" />
+            <x-text-input id="carnet_minsa" class="block mt-1 w-full" type="text" name="carnet_minsa" :value="old('carnet_minsa')" autocomplete="off" />
+            <x-input-error :messages="$errors->get('carnet_minsa')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-
             <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
+                          type="password"
+                          name="password"
+                          required autocomplete="new-password" />
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
             <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
+                          type="password"
+                          name="password_confirmation" required autocomplete="new-password" />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
@@ -49,4 +75,24 @@
             </x-primary-button>
         </div>
     </form>
+
+    <script>
+        (function(){
+            const roleRadios = document.querySelectorAll('input[name="role"]');
+            const carnetGroup = document.getElementById('carnet-group');
+
+            function toggleCarnet() {
+                const selected = document.querySelector('input[name="role"]:checked')?.value;
+                if (selected === 'medico') {
+                    carnetGroup.style.display = 'block';
+                } else {
+                    carnetGroup.style.display = 'none';
+                }
+            }
+
+            roleRadios.forEach(r => r.addEventListener('change', toggleCarnet));
+            // inicializar
+            toggleCarnet();
+        })();
+    </script>
 </x-guest-layout>

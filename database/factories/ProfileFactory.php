@@ -19,6 +19,7 @@ class ProfileFactory extends Factory
         return [
         'birthdate' => $this->faker->date(),
         'address' => $this->faker->address(),
+        'idcard' => $this->faker->unique(),
         'phone' => $this->faker->phoneNumber(),
         'gender' => $this->faker->randomElement(['male','female']),
         'documents_metadata' => null,
