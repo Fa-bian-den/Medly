@@ -19,7 +19,7 @@ class PermissionRoleSeeder extends Seeder
 
         $perms = [
             'users.create','users.view.own','users.update.own',
-            'medico.apply','medico.view.pending','medico.verify','medico.manage.schedule',
+            'doctor.apply','doctor.view.pending','doctor.verify','doctor.manage.schedule',
             'appointments.create','appointments.view.own','appointments.manage',
             'registro.view.own','registro.view.hospital','queue.manage',
             'hospitals.manage','reports.generate'
@@ -31,8 +31,8 @@ class PermissionRoleSeeder extends Seeder
 
         Role::firstOrCreate(['name' => 'admin'])->givePermissionTo(Permission::all());
 
-        Role::firstOrCreate(['name' => 'medico'])->givePermissionTo([
-            'medico.apply','medico.manage.schedule','appointments.manage',
+        Role::firstOrCreate(['name' => 'doctor'])->givePermissionTo([
+            'doctor.apply','doctor.manage.schedule','appointments.manage',
             'registro.view.hospital','queue.manage','reports.generate'
         ]);
 

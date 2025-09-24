@@ -20,6 +20,15 @@ return new class extends Migration
             $table->enum('status', ['pending','active','rejected'])->default('pending'); // control onboarding
             $table->string('carnet_minsa')->nullable(); // requerido para médicos en la solicitud
             $table->string('password');
+
+            // Valores para funcionamiento de OAuth (Inicio de sesion con google)
+            $table->string('provider')->nullable();
+            $table->string('provider_id')->nullable();
+            $table->string('avatar')->nullable();
+
+            // Índice único para proveedor+id (evita duplicados)
+            $table->unique(['provider', 'provider_id'], 'users_provider_provider_id_unique');
+
             $table->rememberToken();
             $table->timestamps();
         });

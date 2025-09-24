@@ -32,16 +32,16 @@
                     <span class="ml-2">{{ __('Paciente') }}</span>
                 </label>
                 <label class="inline-flex items-center">
-                    <input type="radio" name="role" value="medico" class="form-radio" {{ old('role') === 'medico' ? 'checked' : '' }}>
-                    <span class="ml-2">{{ __('Médico') }}</span>
+                    <input type="radio" name="role" value="doctor" class="form-radio" {{ old('role') === 'doctor' ? 'checked' : '' }}>
+                    <span class="ml-2">{{ __('Doctor') }}</span>
                 </label>
             </div>
             <x-input-error :messages="$errors->get('role')" class="mt-2" />
         </div>
 
-        <!-- Carnet MINSA (visible solo si role = medico) -->
-        <div class="mt-4" id="carnet-group" style="display: {{ old('role') === 'medico' ? 'block' : 'none' }};">
-            <x-input-label for="carnet_minsa" :value="__('Carnet MINSA (solo médicos)')" />
+        <!-- Carnet MINSA (visible solo si role = doctor) -->
+        <div class="mt-4" id="carnet-group" style="display: {{ old('role') === 'doctor' ? 'block' : 'none' }};">
+            <x-input-label for="carnet_minsa" :value="__('Carnet MINSA (solo Doctores)')" />
             <x-text-input id="carnet_minsa" class="block mt-1 w-full" type="text" name="carnet_minsa" :value="old('carnet_minsa')" autocomplete="off" />
             <x-input-error :messages="$errors->get('carnet_minsa')" class="mt-2" />
         </div>
@@ -83,7 +83,7 @@
 
             function toggleCarnet() {
                 const selected = document.querySelector('input[name="role"]:checked')?.value;
-                if (selected === 'medico') {
+                if (selected === 'doctor') {
                     carnetGroup.style.display = 'block';
                 } else {
                     carnetGroup.style.display = 'none';

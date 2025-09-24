@@ -34,10 +34,13 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // permisos y roles (siempre primero)
+        // permisos (siempre primero)
         $this->call([
             PermissionRoleSeeder::class,
         ]);
+
+        // Roles
+        $this->call(\Database\Seeders\RoleSeeder::class);
 
         // crear usuario administrador seguro (seeder idempotente debe usar firstOrCreate/updateOrCreate)
         $this->call([
@@ -48,5 +51,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             \Database\Seeders\DepartamentSeeder::class,
         ]);
+
+
     }
 }

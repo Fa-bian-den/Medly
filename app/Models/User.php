@@ -25,10 +25,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'first_name',
         'last_name',
         'email',
-        'password',
-        'phone',
         'status',
-        'carnet_minsa'
+        'carnet_minsa',
+        'password',
+        'provider',
+        'provider_id',
+        'avatar',
+
     ];
 
     /**
@@ -52,6 +55,12 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Helper para nombre completo
+    public function getNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 
     // Relaciones
