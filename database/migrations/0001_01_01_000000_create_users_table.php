@@ -17,20 +17,21 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->enum('status', ['pending','active','rejected'])->default('pending'); // control onboarding
+            $table->enum('status', ['pending','active','disabled','suspended','deleted'])->default('pending'); // control onboarding
             $table->string('carnet_minsa')->nullable(); // requerido para médicos en la solicitud
             $table->string('password');
 
-            // Valores para funcionamiento de OAuth (Inicio de sesion con google)
+            // OAuth
             $table->string('provider')->nullable();
             $table->string('provider_id')->nullable();
             $table->string('avatar')->nullable();
-
-            // Índice único para proveedor+id (evita duplicados)
             $table->unique(['provider', 'provider_id'], 'users_provider_provider_id_unique');
 
             $table->rememberToken();
             $table->timestamps();
+
+            // Soft deletes para desactivar usuarios sin borrar datos clínicos
+            $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

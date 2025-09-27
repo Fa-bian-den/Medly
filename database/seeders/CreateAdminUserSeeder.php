@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -16,32 +15,28 @@ class CreateAdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Limpiar caché de permisos del paquete
+        // Limpiar caché de permisos
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@example.com'],
+        $email = 'admin@example.com';
+        $password = 'Hackatamal'; // cambia en producción
+
+        // Crea o actualiza el admin
+        $admin = User::updateOrCreate(
+            ['email' => $email],
             [
-                'first_name' => 'Admin',
-                'last_name'  => 'System',
-                'password'   => Hash::make('Hackatamal'),
-                'status'     => 'active',
+                'first_name'        => 'Admin',
+                'last_name'         => 'System',
+                'password'          => Hash::make($password),
+                'status'            => 'active',
                 'email_verified_at' => now(),
             ]
         );
 
-                User::updateOrCreate(
-            ['email' => 'admin@example.com'],
-            [
-                'first_name' => 'Admin',
-                'last_name' => 'System',
-                'password' => Hash::make('Hackatamal'),
-                'status' => 'active',
-                'email_verified_at' => now(),
-            ]
-        );
-
-        $role = Role::firstOrCreate(['name' => 'admin']);
-        $admin->assignRole($role);
+        // Asegura rol admin con guard_name consistente y asigna si hace falta
+        $role = Role::firstOrCreate(['name' => 'admin'], ['guard_name' => 'web']);
+        if (! $admin->hasRole('admin')) {
+            $admin->assignRole($role);
+        }
     }
 }

@@ -36,9 +36,9 @@ class RegisteredUserController extends Controller
             'last_name'  => ['required', 'string', 'max:255'],
             'email'      => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password'   => ['required', 'confirmed', Rules\Password::defaults()],
-            'role'       => ['required', Rule::in(['paciente', 'medico'])],
+            'role'       => ['required', Rule::in(['paciente', 'doctor'])],
             'carnet_minsa' => [
-                Rule::requiredIf(fn () => $request->input('role') === 'medico'),
+                Rule::requiredIf(fn () => $request->input('role') === 'doctor'),
                 'nullable',
                 'string',
                 'max:255',
@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
 
         // Determinar estado inicial según el rol
         $role = $request->input('role');
-        $status = $role === 'medico' ? 'pending' : 'active';
+        $status = $role === 'doctor' ? 'pending' : 'active';
 
         // Crear usuario
         $user = User::create([

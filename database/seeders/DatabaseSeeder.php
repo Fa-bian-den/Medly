@@ -52,6 +52,45 @@ class DatabaseSeeder extends Seeder
             \Database\Seeders\DepartamentSeeder::class,
         ]);
 
+        //Centros medicos
+        $this->call([
+            \Database\Seeders\CentersSeeder::class,
+        ]);
+
+        //Servicios medicos
+        $this->call([
+            \Database\Seeders\ServicesSeeder::class,
+        ]);
+
+        //Servicios medicos ofrecidos por centros
+        $this->call([
+            \Database\Seeders\CenterServiceSeeder::class,
+        ]);
+
+        //Medicos
+        $this->call([
+            \Database\Seeders\DoctorProfileSeeder::class,
+        ]);
+
+        //Horarios
+        $this->call([
+            \Database\Seeders\ScheduleSeeder::class,
+        ]);
+
+        //Turnos por horarios
+        $this->call([
+            \Database\Seeders\ScheduleShiftSeeder::class,
+        ]);
+
+        //Horario para agendar cita
+        $this->call([
+            \Database\Seeders\AppointmentSlotSeeder::class,
+        ]);
+
+        //Cita
+        $this->call([
+            \Database\Seeders\AppointmentsSeeder::class,
+        ]);
 
     }
 }
