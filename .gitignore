@@ -11,4 +11,6 @@ Homestead.yaml
 Homestead.json
 /.idea
 /.vscode
-.DS_Store".env" 
+.DS_Store
+# permitir el ejemplo de entorno en el repo
+!.env.example
