@@ -1,29 +1,100 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+@section('content')
+<div class="container">
+  <h1>Mi perfil</h1>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+  @php
+    /** @var \App\Models\User $user */
+    $user = auth()->user();
+    $profile = $user->profile ?? null;
+    $role = $user->getRoleNames()->first() ?? 'paciente';
+    $doctor = $user->doctorProfile ?? null;
+  @endphp
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
-        </div>
+  {{-- Datos mostrados en modo lectura --}}
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Información básica</h5>
+
+      <dl class="row">
+        <dt class="col-sm-3">Nombre</dt>
+        <dd class="col-sm-9">{{ $user->first_name }} {{ $user->last_name }}</dd>
+
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">{{ $user->email }}</dd>
+
+        <dt class="col-sm-3">Fecha de nacimiento</dt>
+        <dd class="col-sm-9">{{ optional($profile)->birthdate ?? '—' }}</dd>
+
+        <dt class="col-sm-3">Cédula / ID</dt>
+        <dd class="col-sm-9">{{ optional($profile)->idcard ?? '—' }}</dd>
+
+        <dt class="col-sm-3">Género</dt>
+        <dd class="col-sm-9">{{ optional($profile)->gender ?? '—' }}</dd>
+
+        <dt class="col-sm-3">Avatar</dt>
+        <dd class="col-sm-9">
+          @if($user->avatar)
+            <img src="{{ asset('storage/'.$user->avatar) }}" alt="avatar" style="height:64px;border-radius:6px;">
+          @else
+            — 
+          @endif
+        </dd>
+      </dl>
     </div>
-</x-app-layout>
+  </div>
+
+  @if($role === 'doctor')
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Información profesional</h5>
+      <dl class="row">
+        <dt class="col-sm-3">Carnet MINSA</dt>
+        <dd class="col-sm-9">{{ $user->carnet_minsa ?? '—' }}</dd>
+
+        <dt class="col-sm-3">Centro propuesto</dt>
+        <dd class="col-sm-9">{{ optional($doctor)->center_id_proposed ? 'Centro #'.optional($doctor)->center_id_proposed : '—' }}</dd>
+
+        <dt class="col-sm-3">Detalles</dt>
+        <dd class="col-sm-9">{{ optional($doctor)->professional_details ?? '—' }}</dd>
+
+        <dt class="col-sm-3">Especialidades</dt>
+        <dd class="col-sm-9">
+          @if(optional($doctor)->specialities)
+            {{ optional($doctor)->specialities->pluck('name')->join(', ') }}
+          @else
+            —
+          @endif
+        </dd>
+      </dl>
+    </div>
+  </div>
+  @endif
+
+  {{-- Formulario limitado: solo teléfono y contacto de emergencia --}}
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Editar contacto rápido</h5>
+
+      @if(session('status'))
+        <div class="alert alert-success">{{ session('status') }}</div>
+      @endif
+
+      <form method="POST" action="{{ route('profile.update') }}">
+        @csrf
+        @method('PATCH')
+
+        <div class="mb-3">
+          <label for="phone" class="form-label">Teléfono</label>
+          <input id="phone" name="phone" type="text" class="form-control @error('phone') is-invalid @enderror"
+                 value="{{ old('phone', optional($profile)->phone ?? $user->phone) }}">
+          @error('phone') <div class="invalid-feedback">{{ $message }}</div> @enderror
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar contacto</button>
+      </form>
+    </div>
+  </div>
+</div>
+@endsection

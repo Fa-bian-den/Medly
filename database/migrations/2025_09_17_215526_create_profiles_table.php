@@ -23,13 +23,6 @@ return new class extends Migration
             $table->json('documents_metadata')->nullable();
             $table->json('professional_details')->nullable();
 
-            // Campos clínicos añadidos
-            $table->json('clinical_history')->nullable();
-            $table->json('allergies')->nullable();
-            $table->json('medications')->nullable();
-            $table->json('emergency_contact')->nullable();
-            $table->text('clinical_notes')->nullable();
-
             $table->unsignedBigInteger('user_id')->unique()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('cascade');
 

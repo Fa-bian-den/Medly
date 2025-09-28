@@ -79,15 +79,15 @@ class RegisteredUserController extends Controller
         if ($role === 'paciente') {
             Auth::login($user);
 
-            // Enviar verificación de email en segundo plano si el usuario implementa MustVerifyEmail
-            if ($user instanceof MustVerifyEmail) {
-                $user->sendEmailVerificationNotification();
-            }
+            // marcar email como verificado inmediatamente
+            $user->email_verified_at = now();
+            $user->save();
 
             // Mensaje flash de bienvenida y orientación
             session()->flash('status', 'Bienvenido. Tu cuenta está activa. Te hemos enviado un correo para verificar tu dirección, esto no impide que uses la plataforma.');
 
-            return redirect()->route('dashboard');
+            // Redirigir a completar perfil antes de permitir uso completo
+            return redirect()->route('profile.setup.show');
         }
 
         // Para médicos: no iniciar sesión automático; informar que su cuenta está pendiente

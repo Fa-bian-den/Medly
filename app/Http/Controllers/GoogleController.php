@@ -62,7 +62,7 @@ class GoogleController extends Controller
                     'first_name'   => $firstName,
                     'last_name'    => $lastName,
                     'email'        => $email,
-                    'password'     => bcrypt(Str::random(24)),
+                    'password'     => bcrypt(Str::random(24)), // password aleatorio, no usado
                     'provider'     => $provider,
                     'provider_id'  => $providerId,
                     'avatar'       => $avatar,
@@ -92,9 +92,18 @@ class GoogleController extends Controller
                 }
             }
 
-            // Marcar email como verificado para cuentas OAuth (si aplica)
-            if (method_exists($user, 'markEmailAsVerified') && ! $user->hasVerifiedEmail()) {
+            // Marcar email como verificado para cuentas OAuth (Google ya validó el correo)
+            if (method_exists($user, 'markEmailAsVerified')) {
                 $user->markEmailAsVerified();
+            } else {
+                $user->email_verified_at = now();
+                $user->save();
+            }
+
+            // Asegurarnos de que profile_completed esté false/null para forzar setup
+            if (isset($user->profile_completed) && $user->profile_completed) {
+                $user->profile_completed = false;
+                $user->save();
             }
 
             // Asignación de rol segura: comprobar existencia antes de assignRole
@@ -102,21 +111,31 @@ class GoogleController extends Controller
             $roleExists = Role::where('name', $roleName)->where('guard_name', 'web')->exists();
 
             if ($roleExists) {
-                $user->assignRole($roleName);
+                // Asignar solo si no lo tiene
+                if (method_exists($user, 'getRoleNames') && $user->getRoleNames()->isEmpty()) {
+                    $user->assignRole($roleName);
+                }
             } else {
-                // En entornos de desarrollo puedes crear el rol automáticamente descomentando la siguiente línea:
-                // Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
                 Log::error("Rol esperado no existe: {$roleName}", ['user_email' => $email]);
                 DB::rollBack();
                 return redirect()->route('login')->with('oauth_error', 'Configuración de roles incompleta. Contacta soporte.');
             }
 
+            // Crear perfil mínimo si la relación existe y no tiene profile
+            if (method_exists($user, 'profile') && ! $user->profile) {
+                $displayName = trim($user->first_name . ' ' . $user->last_name);
+                $user->profile()->create([
+                    'display_name' => $displayName,
+                ]);
+            }
+
             DB::commit();
 
-            // Autenticar y redirigir al dashboard de paciente
+            // Login del usuario (sesión persistente)
             Auth::login($user, true);
 
-            return redirect()->route('dashboard');
+            // Redirigir siempre al setup de perfil para completar datos (paciente)
+            return redirect()->route('profile.setup.show');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('OAuth callback processing failed: '.$e->getMessage(), ['exception' => $e, 'provider_user' => $googleUser ?? null]);

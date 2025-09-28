@@ -92,5 +92,10 @@ class DatabaseSeeder extends Seeder
             \Database\Seeders\AppointmentsSeeder::class,
         ]);
 
+        //Especialidades
+        $this->call([
+            \Database\Seeders\SpecialitiesSeeder::class,
+        ]);
+
     }
 }

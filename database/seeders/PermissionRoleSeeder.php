@@ -22,7 +22,9 @@ class PermissionRoleSeeder extends Seeder
             'doctor.apply','doctor.view.pending','doctor.verify','doctor.manage.schedule',
             'appointments.create','appointments.view.own','appointments.manage',
             'registro.view.own','registro.view.hospital','queue.manage',
-            'hospitals.manage','reports.generate'
+            'hospitals.manage','reports.generate',
+            'appointments.checkin','appointments.cancel','patients.create.basic','patients.update.basic',
+            'documents.upload','documents.view.own'
         ];
 
         foreach ($perms as $p) {
@@ -41,5 +43,10 @@ class PermissionRoleSeeder extends Seeder
             'appointments.create','appointments.view.own','registro.view.own'
         ]);
 
+        Role::firstOrCreate(['name' => 'reception'])->givePermissionTo([
+            'appointments.create','appointments.view.own','appointments.checkin','appointments.cancel',
+            'patients.create.basic','patients.update.basic',
+            'documents.upload','documents.view.own','queue.manage'
+        ]);
     }
 }

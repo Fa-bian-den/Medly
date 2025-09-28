@@ -50,6 +50,19 @@ class DoctorProfile extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+        /**
+     * Relación muchos a muchos con Speciality
+     */
+    public function specialities()
+    {
+        return $this->belongsToMany(
+            \App\Models\Speciality::class,
+            'doctor_profile_speciality',
+            'doctor_profile_id',
+            'speciality_id'
+        )->withTimestamps();
+    }
+
     // Centro propuesto por el médico (opcional)
     public function proposedCenter(): BelongsTo
     {

@@ -56,6 +56,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Profile::class, 'user_id');
     }
 
+    public function medicalHistory()
+{
+    return $this->hasOne(\App\Models\MedicalHistory::class, 'user_id');
+}
+
     // Códigos de verificación por email (1:N)
     public function emailVerificationCodes()
     {
