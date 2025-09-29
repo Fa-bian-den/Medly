@@ -1,0 +1,449 @@
+
+/* Variables, fuentes y base */
+:root {
+    /* Paleta */
+    --bg: #f6f3ee;
+    --ink: #2a2a2a;
+    --muted: #5e5b57;
+    --line: #ece7df;
+    --line-strong: #e1dbd2;
+    --active: #efede6;
+    --panel: #fff;
+    --accent: #8c6cf3;
+
+    /* Tipografías (carga Inter/DM Mono en <head>) */
+    --font-ui: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Helvetica Neue", sans-serif;
+    --font-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    /* Layout */
+    --w-sidenav: 280px;
+    --sidebar-gap: 20px;
+    /* separación entre sidebar y tablero */
+
+    /* Medidas del diseño */
+    --row-w: 1128px;
+    /* ancho de fila y banner */
+    --row-h: 80px;
+    /* alto de fila */
+    --date-col: 220px;
+    /* ancho columna de fecha */
+    --board-w: calc(var(--row-w) + 36px);
+    /* 18px de padding por lado = 1164px */
+    --sep-color: #eee9e0;
+
+    /* Azul banner */
+    --blue-200: #eaf2ff;
+    --blue-300: #cfe0ff;
+    --blue-400: #c2dbff;
+}
+
+/* Reset mínimo + base */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: var(--font-ui);
+    color: var(--ink);
+    background: var(--bg);
+    display: grid;
+    grid-template-columns: var(--w-sidenav) 1fr;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Sidebar */
+.sidenav {
+    width: var(--w-sidenav);
+    padding: 22px 18px;
+    border-right: 1px solid var(--line);
+    background: var(--bg);
+}
+
+.sidenav__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.brand__logo {
+    height: 32px;
+    width: auto;
+    display: block;
+}
+
+.icon-btn {
+    inline-size: 34px;
+    block-size: 34px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.icon-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+    color: var(--ink);
+}
+
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+}
+
+.menu__link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--ink);
+}
+
+.menu__link:hover {
+    background: var(--active);
+}
+
+.menu__link.is-active {
+    background: var(--active);
+}
+
+.menu__icon {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    color: #3b3a39;
+}
+
+.menu__icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+}
+
+/* íconos rellenos (según diseño) */
+.menu li:nth-child(2) .menu__icon svg,
+.menu li:nth-child(5) .menu__icon svg {
+    fill: currentColor;
+    stroke: none;
+}
+
+/* Contenido y tablero */
+.content {
+    padding: 24px 28px 24px var(--sidebar-gap);
+}
+
+/* pegado a la sidebar */
+.board {
+    width: var(--board-w);
+    /* 1164px */
+    margin: 0;
+    /* alineado a la izquierda */
+    background: transparent;
+    border: 1px solid #ebe6dd;
+    border-radius: 18px;
+    padding: 14px 18px 22px;
+    /* deja 1128px útiles adentro */
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .03), 0 12px 30px rgba(0, 0, 0, .06);
+}
+
+/* Barra superior */
+.board__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.bar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.range-title {
+    margin-left: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #7b766f;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    background: #fff;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+}
+
+.chip__icon svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.pager {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.select__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    background: #fff;
+    border: 1px solid var(--line-strong);
+    border-radius: 16px;
+}
+
+.select__btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+/* Banner de día */
+.day-banner {
+    width: var(--row-w);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    border-radius: 14px;
+    background: var(--blue-200);
+    box-shadow: 0 0 0 2px var(--blue-300) inset;
+    color: var(--ink);
+    margin-bottom: 16px;
+}
+
+.day-banner__date {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid var(--blue-400);
+    font-weight: 600;
+}
+
+/*Filas (fecha izquierda + tarjeta) */
+.rows {
+    width: var(--row-w);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+}
+
+.row {
+    position: relative;
+    min-height: var(--row-h);
+    display: grid;
+    grid-template-columns: var(--date-col) 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 16px 8px;/* padding del frame*/
+    border-radius: 16px;
+}
+
+.row__date {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: #8a867f;
+}
+
+.row__day {
+    font: 700 16px/1 var(--font-ui);
+    color: #2a2a2a;
+}
+
+.row__label {
+    font-size: 13px;
+    line-height: 1.2;
+    letter-spacing: .1px;
+}
+
+/* Línea separadora entre filas */
+.row+.row::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -14px;
+    height: 1px;
+    background: var(--sep-color);
+}
+
+/* Separador “fuerte” para bloques */
+.sep hr {
+    height: 1px;
+    background: #e6ded2;
+    border: 0;
+    margin: 12px 0 8px;
+}
+
+/* Tarjeta de cita */
+.card {
+    width: 100%;
+    background: #fff;
+    border: 1px solid #eae4da;
+    border-radius: 12px;
+    padding: 12px 16px 12px 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .02), 0 8px 20px rgba(0, 0, 0, .05);
+}
+
+.card:hover {
+    background: #fbfaf7;
+}
+
+.appt__left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+    background: var(--accent);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .08);
+}
+
+.time {
+    font-weight: 600;
+    color: #222;
+    font-variant-numeric: tabular-nums;
+    /* horas alineadas */
+}
+
+/* Texto del hospital */
+.place {
+    font-family: "Segoe UI", system-ui, -apple-system, var(--font-ui);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: 0;
+    display: inline-block;
+    width: 645px;
+    height: 22px;
+    flex: 0 0 645px;
+    margin-left: 8px;
+    color: #1a1a1a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kebab {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 0;
+    background: transparent;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+}
+
+.kebab svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+    color: #333;
+}
+/* 7) Breakpoints */
+@media (max-width: 1280px) {
+    :root {
+        --date-col: 200px;
+    }
+}
+
+@media (max-width: 1024px) {
+    body {
+        grid-template-columns: 220px 1fr;
+    }
+
+    .sidenav {
+        width: 220px;
+    }
+}
+
+@media (max-width: 640px) {
+    body {
+        grid-template-columns: 88px 1fr;
+    }
+
+    .sidenav {
+        width: 88px;
+        padding-inline: 10px;
+    }
+
+    .menu__text {
+        display: none;
+    }
+
+    /* fallback móvil fluido */
+    .board {
+        width: auto;
+        margin-right: 28px;
+    }
+
+    .rows,
+    .day-banner {
+        width: auto;
+    }
+
+    .row {
+        grid-template-columns: 1fr;
+    }
+
+    .row__date {
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .place {
+        flex: 1 1 auto;
+        width: auto;
+        height: auto;
+    }
+}

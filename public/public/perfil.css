@@ -1,0 +1,468 @@
+/*Sidebar*/
+/* ===== Variables CSS ===== */
+:root {
+    --bg: #FAF9F6; /* fondo sidebar */
+    --ink: #222222;  /* texto base */
+    --ink-sec: #515151;   /* texto secundario (items) */
+    --line: #e9e4db;   /* borde derecho */
+    --pill: #ECECE4;  /* item activo */
+    --radius-side: 16px;  /* radio de sidebar */
+    --radius-pill: 14px;/* radio X-Large de items */
+    --pad-y: 40px;  /* Vertical*/
+    --pad-x: 24px; /* Horizontal/XL */
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+}
+
+/* ===== Sidebar) ===== */
+.sidenav {
+    width: 240px;/* ancho fijo */
+    height: 774px; /* alto fijo */
+    background: var(--bg);
+    border-right: 1px solid var(--line);
+    border-top-right-radius: var(--radius-side);
+    border-bottom-right-radius: var(--radius-side);
+    padding: var(--pad-y) var(--pad-x);
+}
+
+/* Header */
+.sidenav__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: baseline;
+    text-decoration: none;
+    color: inherit;
+}
+
+.brand__name {
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: .5px;
+}
+
+.brand__asterisk {
+    font-weight: 800;
+    font-size: 28px;
+    margin-left: 6px;
+}
+
+.icon-btn {
+    inline-size: 36px;
+    block-size: 36px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--ink);
+}
+
+/* ===== Navegación ===== */
+.sidenav__nav {
+    padding-top: 8px;
+}
+
+/* Anti-bullets robusto */
+.sidenav ul,
+.navlist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navlist>li {
+    list-style: none;
+}
+
+.navlist>li::marker {
+    content: "";
+}
+
+/* Espaciado entre ítems */
+.navlist {
+    display: grid;
+    row-gap: 40px;
+}
+
+.navlink {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr);
+    /* Icono | Texto */
+    align-items: center;
+
+    height: 40px;
+    padding: 8px;
+    gap: 10px;
+
+    width: 100%; /* se adapta al ancho útil del sidebar */
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    color: var(--ink);
+    background: transparent;
+    transition: background-color .15s ease, color .15s ease;
+    overflow: hidden;/* evita desbordes raros */
+}
+
+/* Icono (Feather) centrado en su celda de 54px */
+.navlink i {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.8;
+    justify-self: center;
+}
+
+/* Texto de item */
+.navlink span {
+    font-family: "Segoe UI", "Inter", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    font-weight: 600;  /* Semibold */
+    font-size: 14px;
+    line-height: 20px;  /* altura de línea */
+    color: var(--ink-sec);    /* #515151 */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* Estados */
+.navlink.is-active {
+    background: var(--pill);
+}
+
+.navlink:hover {
+    background: #EFEDE7;
+}
+
+/* Foco accesible */
+.navlink:focus-visible,
+.icon-btn:focus-visible {
+    outline: 2px solid #9e9a90;
+    outline-offset: 2px;
+}
+
+/*Responsive */
+@media (max-width: 420px) {
+    .sidenav {
+        width: 100%;
+        height: auto;
+        border-right: 0;
+        border-radius: 0;
+        padding: 20px 16px;
+    }
+
+    .navlist {
+        row-gap: 24px;
+    }
+}
+
+/* =====Final de la sidebar ===== */
+:root {
+    /* ====== FRAME (card) que contiene texto + calendario ====== */
+    --frame-w: 1168px;
+    --frame-h: 710px;
+    --frame-radius: 20px;
+    --frame-border: #E9E8DD;
+    --card: #FFFFFF;
+
+    /* ====== Layout interno ====== */
+    --card-padding: 24px;/* padding del card */  /* 1168 - (2*24) = 1120; 1120 - (488 + 530) = 102  */
+    --gap-x: 102px;/* separación entre columnas para cerrar exacto */
+
+    /* Columna izquierda (frame del texto) */
+    --left-w: 488px;
+    --left-h: 513px;
+    --left-gap: 32px;
+
+    /* Columna derecha (small calendar) */
+    --right-w: 530px;
+    --cal-h: 452.96px;
+    --vspace-m: 16px;
+    --cal-top: 20px;
+
+    /* Botón Continuar: posición dentro del FRAME */
+    --card-btn-right: 28px;
+    --card-btn-bottom: 20px;
+
+    /* Controles y campos */
+    --field-h: 44px;
+    --textarea-h: 150px;
+    --btn-h: 44px;
+    --btn-w: 180px;
+
+    /* Colores base */
+    --page-bg: #F7F5F0;
+    --ink: #1e1e1e;
+    --muted: #6b6b6b;
+    --line: #ECE8E0;
+    --pill: #EDF0F8;
+    --accent: #2E52D8;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--page-bg);
+}
+
+/* ===== Frame principal ===== */
+.card {
+    position: relative; /* ancla para el botón inferior */
+    width: var(--frame-w);
+    height: var(--frame-h);
+    margin: 24px auto 0;
+    background: var(--card);
+    border: 1px solid var(--frame-border);
+    border-radius: var(--frame-radius);
+    padding: var(--card-padding);
+    padding-bottom: calc(var(--card-padding) + var(--btn-h) + 12px);
+    display: grid;
+    grid-template-columns: var(--left-w) var(--right-w);
+    column-gap: var(--gap-x);
+    align-items: start;
+}
+
+/* ===== Columna izquierda ===== */
+.left {
+    width: var(--left-w);
+    min-width: var(--left-w);
+    height: var(--left-h);
+    display: grid;
+    grid-auto-rows: max-content;
+    row-gap: var(--left-gap);
+}
+
+.intro h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.intro p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.form {
+    display: grid;
+    gap: 18px;
+}
+
+.field label {
+    display: block;
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #4a4a4a;
+}
+
+.field input,
+.field textarea {
+    width: 100%;
+    height: var(--field-h);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    padding: 10px 14px;
+    font-size: 14px;
+    outline: none;
+}
+
+.field textarea {
+    height: var(--textarea-h);
+    resize: vertical;
+}
+
+/* ===== Columna derecha (calendario) ===== */
+.right {
+    width: var(--right-w);
+    min-width: var(--right-w);
+    height: var(--cal-h);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--vspace-m);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px; /* vuelve al padding normal */
+    background: #fff;
+    margin-top: var(--cal-top);
+}
+
+/* Header del calendario */
+.cal__header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 8px;
+}
+
+.month {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-self: center;
+}
+
+.month__label {
+    font-weight: 600;
+}
+
+.nav-btn {
+    inline-size: 36px;
+    block-size: 36px;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Grid del calendario */
+.cal {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    padding: 4px 2px 10px;
+}
+
+.cal__dow {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 6px 0;
+}
+
+/* Días */
+.day {
+    height: 40px;
+    border: 0;
+    background: transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #333;
+}
+
+.day:is(:hover, :focus-visible) {
+    background: var(--pill);
+    outline: none;
+}
+
+.day.is-selected {
+    background: var(--accent);
+    color: #fff;
+}
+
+.day.is-faded {
+    color: #c8c8c8;
+}
+
+/* ===== Botón inferior del frame ===== */
+.card-actions {
+    position: absolute;
+    right: var(--card-btn-right);
+    bottom: var(--card-btn-bottom);
+}
+
+.btn-primary {
+    min-width: var(--btn-w);
+    height: var(--btn-h);
+    border: 0;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    filter: brightness(0.95);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1200px) {
+    .card {
+        width: min(100%, var(--frame-w));
+        height: auto;
+        grid-template-columns: 1fr;
+        row-gap: 20px;
+    }
+
+    .left {
+        width: 100%;
+        height: auto;
+    }
+
+    .right {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        margin-top: 0;
+    }
+}
+
+/* === Alineación exacta sidebar ↔ contenido === */
+:root {
+    --sidebar-w: 240px;
+    --align-top: 40px;/* mismo alto que el padding-top de la sidebar */
+    --gutter-x: 32px;  /* separación horizontal entre sidebar y card */
+}
+
+/* Grid 2 columnas: sidebar + contenido */
+.app {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    min-height: 100dvh;
+}
+
+/* Sidebar: deja el mismo tope superior */
+.sidenav {
+    padding-top: var(--align-top);  /* conserva tus otros paddings (derecha/izquierda/abajo) */
+}
+
+/* Área de contenido: mismo tope y gutter lateral */
+.content {
+    padding: var(--align-top) var(--gutter-x) 24px var(--gutter-x);
+}
+
+/* El frame NO debe agregarse más hacia abajo */
+.card {
+    margin-top: 0;/* quita cualquier 24px que tenías */
+    margin-left: 0; /* asegura arranque al gutter */
+    align-self: start;  /* por si algún contenedor usa alineación distinta */
+}

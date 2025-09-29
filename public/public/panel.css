@@ -1,0 +1,411 @@
+/* Sidebar*/
+
+/* ===== Variables CSS ===== */
+:root {
+    --bg: #FAF9F6; /* fondo sidebar */
+    --ink: #222222; /* texto base */
+    --ink-sec: #515151; /* texto secundario (items) */
+    --line: #e9e4db; /* borde derecho */
+    --pill: #ECECE4; /* item activo */
+    --radius-side: 16px; /* radio de sidebar */
+    --radius-pill: 14px;/* radio X-Large de items */
+    --pad-y: 40px;  /* Vertical/XXXL */
+    --pad-x: 24px; /* Horizontal/XL */
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+}
+
+/*  Sidebar*/
+.sidenav {
+    width: 240px;  /* ancho fijo */
+    height: 774px;/* alto fijo */
+    background: var(--bg);
+    border-right: 1px solid var(--line);
+    border-top-right-radius: var(--radius-side);
+    border-bottom-right-radius: var(--radius-side);
+    padding: var(--pad-y) var(--pad-x);
+}
+
+/* Header */
+.sidenav__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: baseline;
+    text-decoration: none;
+    color: inherit;
+}
+
+.brand__name {
+    font-weight: 800;
+    font-size: 28px;
+    letter-spacing: .5px;
+}
+
+.brand__asterisk {
+    font-weight: 800;
+    font-size: 28px;
+    margin-left: 6px;
+}
+
+.icon-btn {
+    inline-size: 36px;
+    block-size: 36px;
+    display: grid;
+    place-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    color: var(--ink);
+}
+
+/* Navegación */
+.sidenav__nav {
+    padding-top: 8px;
+}
+
+.sidenav ul,
+.navlist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navlist>li {
+    list-style: none;
+}
+
+.navlist>li::marker {
+    content: "";
+}
+
+/* Espaciado entre ítems*/
+.navlist {
+    display: grid;
+    row-gap: 40px;
+}
+
+.navlink {
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr); /* Icono | Texto */
+    align-items: center;
+    height: 40px;
+    padding: 8px;
+    gap: 10px;
+    width: 100%;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    color: var(--ink);
+    background: transparent;
+    transition: background-color .15s ease, color .15s ease;
+    overflow: hidden;
+}
+
+.navlink i {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.8;
+    justify-self: center;
+}
+
+.navlink span {
+    font-family: "Segoe UI", "Inter", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--ink-sec);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* Estados */
+.navlink.is-active {
+    background: var(--pill);
+}
+
+.navlink:hover {
+    background: #EFEDE7;
+}
+
+/* Foco accesible */
+.navlink:focus-visible,
+.icon-btn:focus-visible {
+    outline: 2px solid #9e9a90;
+    outline-offset: 2px;
+}
+
+/*  Responsive*/
+@media (max-width:420px) {
+    .sidenav {
+        width: 100%;
+        height: auto;
+        border-right: 0;
+        border-radius: 0;
+        padding: 20px 16px;
+    }
+
+    .navlist {
+        row-gap: 24px;
+    }
+}
+
+/* Fin Sidebar */
+
+/* ===== Variables globales de contenido ===== */
+:root {
+    --bg: #f7f7f5;
+    --text: #1f1f1f;
+    --muted: #6b6b6b;
+    --line: #E9E8DD;
+    --surface: #FFFFFF;
+
+    --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+    --r-lg: 20px;
+    --space-v-xl: 24px;
+    --space-h-xl: 24px;
+    --space-v-l: 16px;
+
+    /* ancho fijo de la sidebar según tu captura (~232px) */
+    --sidebar-w: 232px;
+}
+
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    font-family: var(--font);
+    color: var(--text);
+    background: var(--bg);
+}
+
+/* ===== GRID PRINCIPAL: sidebar + contenido ===== */
+.app {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+    min-height: 100dvh;
+}
+
+/* ===== CONTENIDO: arranca pegado a la sidebar ===== */
+.main {
+    padding: 32px 32px 48px;
+}
+
+/* ===== CARDS */
+.cards {
+    width: 1168px;
+    height: 144px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    overflow: hidden;
+}
+
+/* Card base */
+.card {
+    width: auto;
+    height: 144px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .04), 0 8px 24px rgba(0, 0, 0, .06);
+    padding: var(--space-v-xl) var(--space-h-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Header */
+.card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-v-l);
+}
+
+.card__title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #7a7a7a;
+    letter-spacing: .2px;
+}
+
+/* Texto principal */
+.card__heading {
+    margin: 0;
+    font-family: "Segoe UI", "Inter", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    font-weight: 600;
+    /* semibold */
+    font-size: 28px;
+    line-height: 36px;
+    color: #212121;
+}
+
+/* Subtexto */
+.card__meta {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+/* Icono circular azul */
+.card__icon {
+    inline-size: 36px;
+    block-size: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: #E7F0FF;
+    border: 1px solid #D6E6FF;
+}
+
+.card__icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: #3B82F6;
+    stroke-width: 2;
+}
+
+
+/*  HISTORIAL */
+.history {
+    margin-top: 24px;
+}
+
+.history-frame {
+    width: 1168px;
+    height: 546px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;/* interior 1128px */
+    gap: 20px;
+    overflow: hidden; /* respeta radios */
+}
+
+/* Sub-frame  */
+.history-frame__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 42px;
+    padding: 0;
+}
+
+.history-frame__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.history-frame__filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    font: inherit;
+    color: var(--text);
+    background: #f5f4f1;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Tabla */
+.history-frame__tablewrap {
+    flex: 1 1 auto;
+    overflow: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table thead th {
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    padding: 16px 24px;
+}
+
+.table tbody td {
+    padding: 16px 24px;
+    border-top: 1px solid var(--line);
+    font-size: 15px;
+}
+
+/* Paginación (alineada a la derecha) */
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0; /* ya hereda el padding del frame (20px) */
+    margin-left: auto; /* <- empuja todo el grupo hacia la derecha */   justify-content: flex-end;
+}
+
+.page-btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    background: #faf9f7;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+/* Botón activo de paginación */
+.page-btn.is-active {
+    background: #213670; /* azul principal */
+    color: #fff;/* texto blanco */
+    border-color: #213670;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;  /* redondo */
+    font-weight: 600; /* un poco más marcado */
+    display: grid;
+    place-items: center;  /* número centrado */
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:1320px) {   /* cuando no quepan 1168px, deja que el contenedor maneje scroll horizontal */
+    .main {
+        overflow-x: auto;
+    }
+}

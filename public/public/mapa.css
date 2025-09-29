@@ -1,0 +1,376 @@
+/* ====== Variables y reset====== */
+:root {
+    --bg: #FAF9F6;
+    --ink: #222222;
+    --ink-sec: #424242;
+    --line: #e9e4db;
+    --pill: #ECECE4;
+    --accent: #2D67FF;
+    --open: #2BA24C;
+    --chip: #ECECE4;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --w-sidebar: 72px;
+    --max-panel: 620px; /* ancho de la columna izquierda */
+}
+
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+}
+
+/* ====== Layout ====== */
+.app {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: var(--w-sidebar) 1fr;
+}
+
+:root {
+    --bg: #FAF9F6;
+    --ink: #222222;
+    --ink-sec: #424242;
+    --line: #e9e4db;
+    --chip: #ECECE4; /* fondo beige del activo */
+    --radius-xl: 24px;
+}
+
+/* Contenedor del sidebar mini */
+.sidebar-mini {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    width: 72px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 8px;
+    background: transparent;
+    border-right: 1px solid var(--line);
+    border-top-right-radius: var(--radius-xl);
+    border-bottom-right-radius: var(--radius-xl);
+}
+
+/* Botón del logo (caja redondeada blanca) */
+.logo-btn {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.logo-btn i,
+.nav-ico i {
+    width: 22px;
+    height: 22px;
+}
+
+/* Pila de iconos */
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;  /* separación vertical amplia */
+    margin-top: 6px;
+}
+
+/* Botón de icono: solo icono, sin borde visible */
+.nav-ico {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    color: var(--ink);
+    border-radius: 12px;
+    transition: background .2s ease, box-shadow .2s ease, transform .06s ease;
+}
+
+/* Hover sutil */
+.nav-ico:hover {
+    background: #f3f2ee;
+}
+
+/* Estado activo por defecto (círculo simple) */
+.nav-ico.is-active {
+    box-shadow: 0 0 0 2px #0000000c inset;
+}
+
+/* Estado destacado (el que se ve como “pill” beige) */
+.nav-ico--highlight {
+    background: var(--chip);
+    box-shadow: 0 1px 0 #00000008 inset, 0 0 0 1px #e6e3db;
+}
+
+/* Accesibilidad: focus visible con teclado */
+.nav-ico:focus-visible,
+.logo-btn:focus-visible {
+    outline: 2px solid #b3cdfd;
+    outline-offset: 2px;
+}
+
+/* Responsive: en móviles quepan bien los toques */
+@media (max-width: 640px) {
+    .sidebar-mini {
+        width: 64px;
+        padding: 12px 6px;
+    }
+
+    .nav-ico {
+        width: 40px;
+        height: 40px;
+    }
+
+    .logo-btn {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+.main {
+    display: grid;
+    grid-template-columns: minmax(360px, var(--max-panel)) 1fr;
+    gap: 32px;
+    padding: 24px 32px;
+    align-items: start;
+}
+
+/* ====== Panel izquierdo ====== */
+.panel {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xl);
+    padding: 16px;
+}
+
+.panel__header {
+    position: sticky;
+    top: 16px; /* se siente “flotante” si hay scroll */
+    background: #fff;
+    padding-bottom: 8px;
+    z-index: 1;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: #fff;
+}
+
+.search__icon svg {
+    width: 18px;
+    height: 18px;
+    color: #9a9a9a
+}
+
+.search__input {
+    border: 0;
+    outline: 0;
+    flex: 1;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+}
+
+.filters {
+    margin: 12px 2px 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    list-style: none;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;  /* espacio entre texto e ícono */
+    border: 0;
+    background: var(--pill);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font: inherit;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.pill--active {
+    background: #dfe2f9;/* azul suave */
+    color: #95a1d6;   /* texto azul oscuro */
+    font-weight: 500;
+}
+
+/* Ajuste fino del icono “X” */
+.pill i {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    stroke-width: 2.4;/* ícono más firme */
+}
+
+/* Alinear visualmente el ícono con el texto */
+.pill i svg {
+    vertical-align: middle;
+    position: relative;
+    top: 0.5px;
+    /* leve ajuste visual */
+}
+
+.block {
+    margin-top: 18px
+}
+
+.block__title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 10px 4px 12px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    padding: 0;
+    list-style: none;
+}
+
+.card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.card__media {
+    margin: 0;
+    line-height: 0;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+}
+
+.card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block
+}
+
+.card__body {
+    padding: 12px 14px
+}
+
+.card__title {
+    font-size: 16px;
+    margin: 0 0 8px;
+    font-weight: 600
+}
+
+.card__meta {
+    margin: 0;
+    font-size: 13px;
+    color: var(--ink-sec);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #f2f5f0;
+}
+
+.badge--open {
+    background: #eaf7ef;
+    color: var(--open);
+    font-weight: 600
+}
+
+.dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #cfcfcf
+}
+
+/* ====== Mapa (derecha) ====== */
+.map {
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--line);
+    background: #fff;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 520px;
+}
+
+.map__svg {
+    width: 100%;
+    height: auto
+}
+
+.map__bg {
+    fill: #f7f7ff
+}
+
+.map__shape {
+    fill: #2d67ff
+}
+
+.map__label {
+    font: 600 18px/1 Inter, sans-serif;
+    fill: #1d2b6a
+}
+
+/* ====== Responsivo ====== */
+@media (max-width: 1200px) {
+    .main {
+        grid-template-columns: 1fr;
+    }
+
+    .map {
+        min-height: 380px
+    }
+}
+
+@media (max-width: 720px) {
+    .cards {
+        grid-template-columns: 1fr
+    }
+
+    .app {
+        grid-template-columns: var(--w-sidebar) 1fr
+    }
+
+    .main {
+        padding: 16px
+    }
+}
