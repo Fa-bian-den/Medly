@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Estilos (resources/css/login.css) -->
+  <!-- Estilos -->
   <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 </head>
 
@@ -24,8 +24,8 @@
         </p>
       </header>
 
-      <!-- Botón Google (redirige a route google.redirect) -->
-      <a href="{{ route('google.redirect') }}" class="btn btn--google" role="button" aria-label="Accede con Google">
+      <!-- Botón Google -->
+      <button class="btn btn--google" type="button" aria-label="Accede con Google">
         <span class="g-logo" aria-hidden="true">
           <!-- Google SVG -->
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
@@ -36,7 +36,7 @@
           </svg>
         </span>
         Accede con Google
-      </a>
+      </button>
 
       <!-- Separador -->
       <div class="divider" role="separator" aria-label="o">
@@ -45,23 +45,18 @@
         <span class="divider__line" aria-hidden="true"></span>
       </div>
 
-      <!-- Formulario (envía a route('login')) -->
-      <form class="form" action="{{ route('login') }}" method="POST" novalidate>
-        @csrf
-
+      <!-- Formulario -->
+      <form class="form" action="#" method="post" novalidate>
         <label class="field">
           <span class="field__label">Correo electrónico</span>
-          <input class="input" id="email" type="email" name="email" placeholder="Escribe tu dirección de correo" value="{{ old('email') }}" required autocomplete="username" />
-          @if($errors->has('email'))
-            <p class="field__error" role="alert">{{ $errors->first('email') }}</p>
-          @endif
+          <input class="input" type="email" name="email" placeholder="Escribe tu dirección de correo" autocomplete="email" />
         </label>
 
         <label class="field">
           <span class="field__label">Contraseña</span>
           <div class="input input--with-icon">
-            <input id="password" type="password" name="password" placeholder="Elige una contraseña" required autocomplete="current-password" />
-            <button class="input__icon" type="button" aria-label="Mostrar contraseña" onclick="togglePassword()">
+            <input type="password" name="password" placeholder="Elige una contraseña" autocomplete="current-password" />
+            <button class="input__icon" type="button" aria-label="Mostrar/Ocultar contraseña">
               <!-- Icono ojo -->
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
                 <path d="M12 5C6.5 5 2.1 8.6 1 12c1.1 3.4 5.5 7 11 7s9.9-3.6 11-7c-1.1-3.4-5.5-7-11-7Z"
@@ -70,21 +65,7 @@
               </svg>
             </button>
           </div>
-          @if($errors->has('password'))
-            <p class="field__error" role="alert">{{ $errors->first('password') }}</p>
-          @endif
         </label>
-
-        <div class="form__meta">
-          <label class="remember">
-            <input id="remember_me" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-            <span class="remember__label">Recuerda mi sesión</span>
-          </label>
-
-          @if (Route::has('password.request'))
-            <a class="link--muted" href="{{ route('password.request') }}">¿Has olvidado tu contraseña?</a>
-          @endif
-        </div>
 
         <button class="btn btn--primary" type="submit">Usa tu correo electrónico</button>
       </form>
@@ -93,7 +74,7 @@
       <footer class="auth__footer">
         <div class="auth__footer-left">
           <span>¿Aún no tienes cuenta?</span>
-          <a class="pill-link" href="{{ route('register') }}" aria-label="Regístrate">Regístrate</a>
+          <a class="pill-link" href="#" aria-label="Regístrate">Regístrate</a>
         </div>
         <nav class="auth__footer-right" aria-label="Legal">
           <a href="#">Privacidad</a>
@@ -102,14 +83,5 @@
       </footer>
     </section>
   </main>
-
-  <!-- Minimal JS para mostrar/ocultar contraseña -->
-  <script>
-    function togglePassword() {
-      const pwd = document.getElementById('password');
-      if (!pwd) return;
-      pwd.type = pwd.type === 'password' ? 'text' : 'password';
-    }
-  </script>
 </body>
 </html>

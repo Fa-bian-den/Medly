@@ -19,18 +19,22 @@ class EnsureProfileCompleted
             return $next($request);
         }
 
-        // Si tienes columna boolean profile_completed en users, úsala.
-        if (! empty($user->profile_completed)) {
+        // Recomendación: usar un boolean claro en users, por ejemplo completed_profile
+        // y comprobar estrictamente === true to avoid surprises with empty strings/null.
+        if (! empty($user->completed_profile)) {
             return $next($request);
         }
 
-        // Permitir rutas de setup, profile edit y logout para evitar loop
-        if ($request->routeIs('profile.setup.*') ||
+        // Permitir rutas de setup y logout para evitar loop
+        // Asegúrate que tus rutas realmente se llaman así en routes/web.php
+        if ($request->routeIs('profile.setup') ||
+            $request->routeIs('profile.setup.store') ||
             $request->routeIs('profile.edit') ||
             $request->routeIs('logout')) {
             return $next($request);
         }
 
-        return redirect()->route('profile.setup.show');
+        // Redirige a la ruta que muestre el formulario de setup (ajusta el nombre si tu ruta es distinta)
+        return redirect()->route('profile.setup');
     }
 }

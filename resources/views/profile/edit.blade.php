@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-  <h1>Mi perfil</h1>
+<!-- Incluir CSS específico de perfil -->
+<link rel="stylesheet" href="{{ asset('css/perfil.css') }}" />
+
+<div class="container perfil-root">
+  <h1 class="perfil-title">Mi perfil</h1>
 
   @php
     /** @var \App\Models\User $user */
@@ -12,12 +15,11 @@
     $doctor = $user->doctorProfile ?? null;
   @endphp
 
-  {{-- Datos mostrados en modo lectura --}}
-  <div class="card mb-4">
+  <div class="card mb-4 perfil-card">
     <div class="card-body">
       <h5 class="card-title">Información básica</h5>
 
-      <dl class="row">
+      <dl class="row perfil-dl">
         <dt class="col-sm-3">Nombre</dt>
         <dd class="col-sm-9">{{ $user->first_name }} {{ $user->last_name }}</dd>
 
@@ -36,9 +38,9 @@
         <dt class="col-sm-3">Avatar</dt>
         <dd class="col-sm-9">
           @if($user->avatar)
-            <img src="{{ asset('storage/'.$user->avatar) }}" alt="avatar" style="height:64px;border-radius:6px;">
+            <img src="{{ asset('storage/'.$user->avatar) }}" alt="avatar" class="perfil-avatar">
           @else
-            — 
+            —
           @endif
         </dd>
       </dl>
@@ -46,10 +48,10 @@
   </div>
 
   @if($role === 'doctor')
-  <div class="card mb-4">
+  <div class="card mb-4 perfil-card">
     <div class="card-body">
       <h5 class="card-title">Información profesional</h5>
-      <dl class="row">
+      <dl class="row perfil-dl">
         <dt class="col-sm-3">Carnet MINSA</dt>
         <dd class="col-sm-9">{{ $user->carnet_minsa ?? '—' }}</dd>
 
@@ -72,8 +74,7 @@
   </div>
   @endif
 
-  {{-- Formulario limitado: solo teléfono y contacto de emergencia --}}
-  <div class="card">
+  <div class="card perfil-card">
     <div class="card-body">
       <h5 class="card-title">Editar contacto rápido</h5>
 

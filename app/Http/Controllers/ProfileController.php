@@ -12,35 +12,47 @@ use Illuminate\Support\Facades\Schema;
 
 class ProfileController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Mostrar el formulario para editar perfil.
      */
-    public function edit(Request $request): View
+    public function edit(Request $request): View|RedirectResponse
     {
+        $user = Auth::user();
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
         ]);
     }
 
     /**
-     * Actualizar solo los campos permitidos del perfil (contacto rápido).
-     * Nota: eliminamos manejo de emergency_contact_*; esos datos están en medical_histories.
+     * Actualizar solo los campos permitidos del perfil.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $user = $request->user();
+        $user = Auth::user();
+        if (! $user) {
+            return redirect()->route('login');
+        }
 
-        // Asegurar que existe profile asociado
+        if (! method_exists($user, 'profile')) {
+            return Redirect::back()->withErrors(['profile' => 'Relación profile no definida en User.']);
+        }
+
         $profile = $user->profile ?? $user->profile()->create([]);
 
-        // Actualizar solo los campos permitidos por ProfileUpdateRequest
-        // Aquí mantenemos solo 'phone' como ejemplo si quieres conservarlo,
-        // pero según tu indicación lo eliminamos; dejamos este bloque vacío
-        // salvo para otros campos permitidos en ProfileUpdateRequest.
         $allowed = $request->validated();
 
-        // Filtrar cualquier campo no deseado por seguridad (defensa en profundidad)
-        $permitted = array_intersect_key($allowed, array_flip(['phone'])); // si eliminas phone, pon []
+        // Ajusta la lista de campos que quieres persistir en profile
+        $permittedKeys = ['phone', 'emergency_contact_name', 'emergency_contact_phone'];
+        $permitted = array_intersect_key($allowed, array_flip($permittedKeys));
 
         foreach ($permitted as $key => $value) {
             $profile->{$key} = $value;
@@ -60,7 +72,10 @@ class ProfileController extends Controller
             'password' => ['required', 'current_password'],
         ]);
 
-        $user = $request->user();
+        $user = Auth::user();
+        if (! $user) {
+            return redirect()->route('login');
+        }
 
         Auth::logout();
 
@@ -74,28 +89,24 @@ class ProfileController extends Controller
 
     /**
      * Controlador responsable del acceso al dashboard.
-     * Si el usuario no tiene el perfil completado lo redirige a profile.setup
+     * Si el usuario no tiene el perfil completado lo redirige al setup.
      */
-    public function dashboard(Request $request)
+    public function dashboard(Request $request): View|RedirectResponse
     {
-        $user = $request->user();
-
-        // Si no hay usuario autenticado, dejar que el middleware auth lo maneje.
+        $user = Auth::user();
         if (! $user) {
             return redirect()->route('login');
         }
 
-        // Si el email no está verificado dejamos que el middleware 'verified' lo redirija.
         if (empty($user->email_verified_at)) {
             return redirect()->route('verification.notice');
         }
 
-        // Si la columna profile_completed existe y el usuario no la tiene en true, redirige al setup
-        if (Schema::hasColumn('users', 'profile_completed') && empty($user->profile_completed)) {
-            return redirect()->route('profile.setup.show');
+        // Comprueba la columna real en tu esquema; aquí usamos completed_profile
+        if (Schema::hasColumn('users', 'completed_profile') && empty($user->completed_profile)) {
+            return redirect()->route('profile.setup');
         }
 
-        // Si todo ok, mostrar dashboard
         return view('dashboard');
     }
 }

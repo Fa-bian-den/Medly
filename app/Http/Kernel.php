@@ -45,4 +45,6 @@ class Kernel extends HttpKernel
         // Aquí debe ir exactamente este mapping
         'profile.completed' => \App\Http\Middleware\EnsureProfileCompleted::class,
     ];
+
+    
 }

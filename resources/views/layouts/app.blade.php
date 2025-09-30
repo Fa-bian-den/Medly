@@ -1,38 +1,74 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<!doctype html>
+<html lang="{{ str_replace('_','-', app()->getLocale()) }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+  <title>{{ config('app.name', 'Medly') }}</title>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+  <!-- estilos del panel -->
+  <link rel="stylesheet" href="{{ asset('css/panel.css') }}" />
+</head>
+<body class="app-body">
+  <div class="app-root">
+    {{-- Sidebar siempre presente --}}
+    @include('layouts.sidebar')
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+    {{-- Contenido principal (dashboard u otras vistas) --}}
+    <main class="main-content with-sidebar">
+      @yield('content')
+    </main>
+  </div>
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+  <!-- Feather icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Renderizar icons Feather
+      if (window.feather && typeof window.feather.replace === 'function') {
+        window.feather.replace();
+      }
 
-            <!-- Page Content -->
-            @isset($slot)
-                {{ $slot }}
-            @else
-                @yield('content')
-            @endisset
-        </div>
-    </body>
+      // Toggle global para abrir/cerrar la sidenav (usa body.sidenav-open)
+      document.querySelectorAll('.icon-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.body.classList.toggle('sidenav-open');
+        });
+      });
+
+      // Perfil dropdown (botón dentro del sidebar)
+      var profileBtn = document.querySelector('.navlink--profile');
+      var profileMenu = document.getElementById('profile-menu');
+
+      if (profileBtn && profileMenu) {
+        profileBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          var isOpen = profileMenu.classList.toggle('show');
+          profileBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          profileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        });
+
+        // Cerrar submenú al hacer click fuera
+        document.addEventListener('click', function (e) {
+          if (! profileBtn.contains(e.target) && ! profileMenu.contains(e.target)) {
+            profileMenu.classList.remove('show');
+            profileBtn.setAttribute('aria-expanded', 'false');
+            profileMenu.setAttribute('aria-hidden', 'true');
+          }
+        });
+
+        // Cerrar con Escape
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') {
+            profileMenu.classList.remove('show');
+            profileBtn.setAttribute('aria-expanded', 'false');
+            profileMenu.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+    });
+  </script>
+</body>
 </html>

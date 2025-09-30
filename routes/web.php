@@ -3,18 +3,17 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\GoogleController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\ProfileSetupController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AppointmentSlotController;
 use App\Http\Controllers\AppointmentDocumentController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\DoctorController;
-
+use App\Http\Controllers\CenterController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -65,39 +64,37 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Recursos de citas (CRUD)
+    // Resources: citas (CRUD)
     Route::resource('appointments', AppointmentController::class);
 
-    // Endpoint JSON paginado para citas (SPA / mobile)
-    Route::get('api/appointments', [AppointmentController::class, 'apiIndex'])->name('api.appointments.index');
-
-        // Slots de turnos (CRUD)
+    // Slots de turnos (CRUD)
     Route::resource('appointment_slots', AppointmentSlotController::class);
 
-    // Endpoint JSON (opcional)
-    Route::get('api/appointment_slots', [AppointmentSlotController::class, 'apiIndex'])->name('api.appointment_slots.index');
-    });
-
-        // Documentos de citas (CRUD parcial: index, create, store, show, destroy)
+    // Documentos de citas (CRUD parcial: index, create, store, show, destroy)
     Route::resource('appointment_documents', AppointmentDocumentController::class)
         ->only(['index','create','store','show','destroy']);
 
-    // Endpoint JSON para documentos
-    Route::get('api/appointment_documents', [AppointmentDocumentController::class, 'apiIndex'])->name('api.appointment_documents.index');
-
-    // Pacientes (web + api)
+        // Rutas de pacientes
     Route::middleware('auth')->group(function () {
-        Route::resource('patients', PatientController::class);
-        Route::get('api/patients', [PatientController::class, 'apiIndex'])->name('api.patients.index');
-        Route::get('api/patients/{patient}', [PatientController::class, 'apiShow'])->name('api.patients.show');
-    });
-
-    Route::middleware('auth')->group(function () {
-    Route::resource('doctors', DoctorController::class);
-    Route::post('doctors/{doctor}/review', [DoctorController::class, 'review'])->name('doctors.review');
-    Route::get('api/doctors', [DoctorController::class, 'apiIndex'])->name('api.doctors.index');
+        Route::resource('patients', \App\Http\Controllers\PatientController::class)->except(['create','edit']);
+        // usamos resource por REST; si ya tenés rutas individuales, añade:
+        Route::get('patients', [\App\Http\Controllers\PatientController::class, 'index'])->name('patients.index');
+        Route::get('patients/create', [\App\Http\Controllers\PatientController::class, 'create'])->name('patients.create');
+        Route::post('patients', [\App\Http\Controllers\PatientController::class, 'store'])->name('patients.store');
+        Route::get('patients/{patient}', [\App\Http\Controllers\PatientController::class, 'show'])->name('patients.show');
+        Route::get('patients/{patient}/edit', [\App\Http\Controllers\PatientController::class, 'edit'])->name('patients.edit');
+        Route::put('patients/{patient}', [\App\Http\Controllers\PatientController::class, 'update'])->name('patients.update');
+        Route::delete('patients/{patient}', [\App\Http\Controllers\PatientController::class, 'destroy'])->name('patients.destroy');
 });
 
+
+    // Doctores (web) y acción adicional review
+    Route::resource('doctors', DoctorController::class);
+    Route::post('doctors/{doctor}/review', [DoctorController::class, 'review'])->name('doctors.review');
+
+    // Centers (web CRUD)
+    Route::resource('centers', CenterController::class);
+}); // fin group auth
 
 /*
 Rutas que requieren autenticación y verificación de email
@@ -112,6 +109,13 @@ Route::middleware(['auth','verified'])->group(function(){
     Route::get('/profile/setup', [ProfileSetupController::class, 'show'])->name('profile.setup.show');
     Route::post('/profile/setup', [ProfileSetupController::class, 'store'])->name('profile.setup.store');
 });
+
+Route::resource('admin', App\Http\Controllers\AdminController::class);
+
+// routes/web.php
+Route::get('/mapa', function () {
+    return view('static.mapa');
+})->name('mapa');
 
 /*
 Carga de rutas de auth adicionales
